@@ -45,6 +45,13 @@ resource "aws_security_group" "wp_public_sg" {
   description = "used for elastic load balancer for public"
   vpc_id      = "${aws_vpc.wp_vpc.id}"
 
+ingress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
   #HTTP
 
   ingress {
@@ -53,13 +60,12 @@ resource "aws_security_group" "wp_public_sg" {
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
- ingress {
+  ingress {
     from_port   = 8080
     to_port     = 8080
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
-
   egress {
     from_port   = 0
     to_port     = 0
@@ -75,6 +81,22 @@ resource "aws_security_group" "wp_private_sg" {
   description = "used for private security"
   vpc_id      = "${aws_vpc.wp_vpc.id}"
 
+ingress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  #HTTP
+
+  ingress {
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+
+}
   ingress {
     from_port   = 0
     to_port     = 0

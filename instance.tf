@@ -4,7 +4,12 @@ resource "aws_instance" "webserver" {
   key_name        = "terraform"
   security_groups = ["${aws_security_group.wp_public_sg.id}"]
   subnet_id       = "${aws_subnet.wp_public1_subnet.id}"
-  user_data = "!/bin/bash && sudo apt update -y && sudo apt install apache2 -y"
+ user_data = <<-EOF
+#!/bin/bash
+sudo apt update -y
+sudo apt install apache2 -y
+-EOF
+
 
   provisioner "local-exec" {
     command = "echo 'hisandy' > /var/www/html/index.html"

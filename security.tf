@@ -1,7 +1,6 @@
 resource "aws_security_group" "defaultsecurity" {
   name        = "defaultterraform"
   description = "Used to access the dev instances"
-  vpc_id      = "${aws_vpc.wp_vpc.id}"
 
   ingress {
     from_port   = 22
@@ -54,6 +53,13 @@ resource "aws_security_group" "wp_public_sg" {
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
+ ingress {
+    from_port   = 8080
+    to_port     = 8080
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
   egress {
     from_port   = 0
     to_port     = 0

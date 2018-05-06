@@ -18,7 +18,7 @@ resource "aws_internet_gateway" "wp_internet_gateway" {
   tags {
     Name = "wp_igw"
   }
-}
+	}
 
 #Route tables
 
@@ -114,3 +114,25 @@ resource "aws_route_table_association" "wp_private2_assoc" {
   subnet_id      = "${aws_subnet.wp_private2_subnet.id}"
   route_table_id = "${aws_default_route_table.wp_private_rt.id}"
 }
+
+
+#NAT gateway
+
+# NAT
+resource "aws_eip" "neweip" {
+  vpc   = true
+}
+
+resource "aws_nat_gateway" "nat" {
+  allocation_id = "${element(aws_eip.neweip.*.id, count.index)}"
+  subnet_id     = "${element(aws_subnet.wp_public1_subnet.*.id, count.index)}"
+}
+
+resource "aws_route" "nat_gateway" {
+  route_table_id         = "${element(aws_default_route_table.wp_private_rt.*.id, count.index)}"
+  destination_cidr_block = "10.0.4.0/16"
+  nat_gateway_id         = "${element(aws_nat_gateway.nat.*.id, count.index)}"
+  count                  = "${length(var.cidrs)}"
+
+}
+

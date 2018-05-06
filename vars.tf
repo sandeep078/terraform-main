@@ -15,3 +15,10 @@ variable "valid_statistics" {
     Sum         = "1	"
   }
 }
+
+variable "cidrs" {
+  type = "list"
+  default = [ "10.0.3.0/16",
+     "10.0.4.0/16",
+]
+}

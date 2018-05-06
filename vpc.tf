@@ -130,9 +130,8 @@ resource "aws_nat_gateway" "nat" {
 
 resource "aws_route" "nat_gateway" {
   route_table_id         = "${element(aws_default_route_table.wp_private_rt.*.id, count.index)}"
-  destination_cidr_block = "10.0.4.0/16"
+  destination_cidr_block = "0.0.0.0/0"
   nat_gateway_id         = "${element(aws_nat_gateway.nat.*.id, count.index)}"
-  count                  = "${length(var.cidrs)}"
 
 }
 

@@ -1,3 +1,10 @@
+
+resource "aws_iam_server_certificate" "test_cert" {
+  name             = "some_test_cert"
+  certificate_body = "${file("server.cert")}"
+  private_key      = "${file("server.key")}"
+}
+
 resource "aws_elb" "wp_elb" {
   name = "newbalancer-elb"
 
@@ -5,7 +12,7 @@ resource "aws_elb" "wp_elb" {
     "${aws_subnet.wp_public2_subnet.id}",
   ]
 
-  security_groups = ["${aws_security_group.wp_public_sg.id}"]
+  security_groups = ["${aws_security_group.wp_sg.id}"]
 
   listener {
     instance_port     = 80
@@ -13,6 +20,15 @@ resource "aws_elb" "wp_elb" {
     lb_port           = 80
     lb_protocol       = "http"
   }
+ listener {
+    instance_port     = 80
+    instance_protocol = "http"
+    lb_port           = 443
+    lb_protocol       = "https"
+    ssl_certificate_id = "${aws_iam_server_certificate.test_cert.arn}"
+  }
+
+
 
   health_check {
     healthy_threshold   = 2
@@ -22,9 +38,9 @@ resource "aws_elb" "wp_elb" {
     interval            = 30
   }
 
-  instances = ["${aws_instance.webserver.id}",
-	"${aws_instance.appserver.id}"
-   ]
+ # instances = ["${aws_instance.webserver.id}",
+ #   "${aws_instance.appserver.id}",
+ # ]
 
   cross_zone_load_balancing   = true
   idle_timeout                = 400

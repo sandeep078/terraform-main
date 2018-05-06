@@ -14,5 +14,4 @@ variable "valid_statistics" {
     SampleCount = "2"
     Sum         = "1	"
   }
-
 }

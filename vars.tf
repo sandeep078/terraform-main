@@ -1,3 +1,5 @@
+data "aws_availability_zones" "available" {}
+
 variable "statistic" {
   type        = "string"
   description = "The statistic to apply to the alarm's associated metric. Valid values are 'SampleCount', 'Average', 'Sum', 'Minimum' and 'Maximum'"

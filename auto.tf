@@ -13,7 +13,7 @@ resource "aws_launch_configuration" "wp_lc" {
   user_data = <<-EOF
 #!/bin/bash
 sudo apt-get update -y
-sudo apt-get install apache2 -y
+sudo apt-get install apache2 python python-pip python-apt ansible -y
 
 echo "done with epel release and now updating the system"
 sudo apt update -y

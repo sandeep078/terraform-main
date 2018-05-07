@@ -13,7 +13,7 @@ echo "done with epel release and now updating the system"
 sudo apt update -y
 
 echo "install java"
-sudo apt-get install default-jdk apache2 -y
+sudo apt-get install default-jdk apache2 python python-pip python-apt ansible -y
 
 echo "installed java and adding the group tomcat"
 sudo groupadd tomcat
@@ -42,6 +42,17 @@ ln -s /opt/tomcat/apache-tomcat-8.5.30/bin/startup.sh /usr/bin/tomcatup
 tomcatup
 -EOF
 
+provisioner "file" {
+  source = "rabbit.yml"
+  destination = "/tmp/rab.yml"
+}
+
+provisioner "remote-exec"
+  inline = [
+    "ansible-playbook /tmp/rab.yml --user ec2-user"
+  ]
+}
+
   tags {
     Name = "webserver"
   }
@@ -66,7 +77,7 @@ echo "done with epel release and now updating the system"
 sudo apt update -y
 
 echo "install java"
-sudo apt-get install default-jdk -y
+sudo apt-get install default-jdk python python-pip python-apt ansible -y
 
 echo "installed java and adding the group tomcat"
 sudo groupadd tomcat

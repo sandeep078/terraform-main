@@ -42,16 +42,6 @@ ln -s /opt/tomcat/apache-tomcat-8.5.30/bin/startup.sh /usr/bin/tomcatup
 tomcatup
 -EOF
 
-provisioner "file" {
-  source = "rabbit.yml"
-  destination = "/tmp/rab.yml"
-}
-
-provisioner "remote-exec"
-  inline = [
-    "ansible-playbook /tmp/rab.yml --user ec2-user"
-  ]
-}
 
   tags {
     Name = "webserver"
